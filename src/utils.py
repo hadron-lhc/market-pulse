@@ -2,7 +2,8 @@ import yfinance as yf
 import pandas as pd
 
 
-def get_stock_data(ticker, period="1y"):
+def get_stock_data(ticker_name, period="1y"):
+    ticker = yf.Ticker(ticker_name)
     df = ticker.history(period)
     return df
 
@@ -18,7 +19,7 @@ def get_metrics(df):
     metrics = {
         "actual_price": precio_actual,
         "past_price": precio_ayer,
-        "Varacion_diaria": variacion_diaria,
+        "delta": variacion_diaria,
         "volumen_actual": volumen,
         "maximo_anual": maximo,
         "minimo_anual": minimo,
