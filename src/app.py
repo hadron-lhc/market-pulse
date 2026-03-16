@@ -10,7 +10,7 @@ def show_metrics(df):
 
     with col1:
         precio = f"${metrics['actual_price']:.2f}"
-        delta = f"{metrics['delta']:+.2}%"
+        delta = f"{metrics['delta']:+.2f}%"
 
         st.metric(label="Precio actual", value=precio, delta=delta)
 
@@ -19,12 +19,12 @@ def show_metrics(df):
         st.metric(label="Volumen", value=volumen)
 
     with col3:
-        max = f"${metrics['maximo_anual']:.2f}"
-        st.metric(label="Maximo anual", value=max)
+        max_val = f"${metrics['maximo_anual']:.2f}"
+        st.metric(label="Maximo anual", value=max_val)
 
     with col4:
-        min = f"${metrics['minimo_anual']:.2f}"
-        st.metric(label="Minimo anual", value=min)
+        min_val = f"${metrics['minimo_anual']:.2f}"
+        st.metric(label="Minimo anual", value=min_val)
 
 
 def main():
@@ -36,7 +36,6 @@ def main():
         st.stop()
     else:
         df = get_stock_data(ticker_name)
-        st.write(df)
         show_metrics(df)
 
 
