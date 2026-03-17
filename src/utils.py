@@ -1,5 +1,7 @@
 import yfinance as yf
 import pandas as pd
+import plotly.graph_objects as go
+import streamlit as st
 
 
 def get_stock_data(ticker_name, period="1y"):
@@ -28,10 +30,22 @@ def get_metrics(df):
     return metrics
 
 
+def get_chart(ticker_name):
+    df = get_stock_data(ticker_name)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df.index, y=df["Close"], mode="lines", name=ticker_name))
+
+    fig.update_layout(
+        title=f"Precio histórico - {ticker_name}",
+        xaxis_title="Fecha",
+        yaxis_title="Precio (USD)",
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
 def main():
-    ticker = yf.Ticker("AAPL")
-    df = get_stock_data(ticker)
-    print(df.head())
+    pass
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import streamlit as st
 import yfinance as yf
-from utils import get_stock_data, get_metrics
+from utils import get_stock_data, get_metrics, get_chart
 
 
 def show_metrics(df):
@@ -37,6 +37,8 @@ def main():
     else:
         df = get_stock_data(ticker_name)
         show_metrics(df)
+        st.markdown("")
+        get_chart(ticker_name)
 
 
 if __name__ == "__main__":
