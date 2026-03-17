@@ -5,9 +5,14 @@ import streamlit as st
 
 
 def get_stock_data(ticker_name, period="1y"):
+    """Recibe un string, retorna un DataFrame"""
     ticker = yf.Ticker(ticker_name)
-    df = ticker.history(period)
-    return df
+    return ticker.history(period)
+
+
+def get_multiple_stocks(tickers, period="1y"):
+    """Recibe una lista, retorna un diccionario {ticker: df}"""
+    return {ticker: get_stock_data(ticker, period) for ticker in tickers}
 
 
 def get_metrics(df):
@@ -30,8 +35,7 @@ def get_metrics(df):
     return metrics
 
 
-def get_chart(ticker_name):
-    df = get_stock_data(ticker_name)
+def get_chart(df, ticker_name):
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=df.index, y=df["Close"], mode="lines", name=ticker_name))
 
@@ -40,6 +44,24 @@ def get_chart(ticker_name):
         xaxis_title="Fecha",
         yaxis_title="Precio (USD)",
     )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def get_comparison_chart(dfs):
+    fig = go.Figure()
+    for ticker, df in dfs.items():
+        precio_inicial = df["Close"].iloc[0]
+        df["retorno"] = (df["Close"] - precio_inicial) / precio_inicial * 100
+        fig.add_trace(
+            go.Scatter(x=df.index, y=df["retorno"], mode="lines", name=ticker)
+        )
+
+        fig.update_layout(
+            title="Comparacion de rendimiento",
+            xaxis_title="Fecha",
+            yaxis_title="Retorno (%)",
+        )
 
     st.plotly_chart(fig, use_container_width=True)
 
