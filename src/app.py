@@ -1,11 +1,12 @@
 import streamlit as st
-import yfinance as yf
 from utils import (
     get_stock_data,
     get_metrics,
     get_chart,
     get_multiple_stocks,
     get_comparison_chart,
+    get_forecast,
+    get_forecast_chart,
 )
 
 
@@ -58,7 +59,11 @@ def main():
         if len(ticker_name) == 1:
             df = get_stock_data(ticker_name[0])
             show_metrics(df)
-            get_chart(df, ticker_name[0])
+            chart = get_chart(df, ticker_name[0])
+            st.plotly_chart(chart, use_container_width=True)
+            forecast = get_forecast(df)
+            forecast_chart = get_forecast_chart(df, forecast, ticker_name[0])
+            st.plotly_chart(forecast_chart, use_container_width=True)
         else:
             dfs = get_multiple_stocks(ticker_name)
             cols = st.columns(len(dfs))
@@ -66,7 +71,8 @@ def main():
                 with cols[i]:
                     st.write(ticker)
                     show_metrics_short(df)
-            get_comparison_chart(dfs)
+            comparison_chart = get_comparison_chart(dfs)
+            st.plotly_chart(comparison_chart, use_container_width=True)
 
 
 if __name__ == "__main__":

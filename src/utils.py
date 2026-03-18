@@ -1,7 +1,6 @@
 import yfinance as yf
-import pandas as pd
 import plotly.graph_objects as go
-import streamlit as st
+from prophet import Prophet
 
 
 def get_stock_data(ticker_name, period="1y"):
@@ -45,7 +44,7 @@ def get_chart(df, ticker_name):
         yaxis_title="Precio (USD)",
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    return fig
 
 
 def get_comparison_chart(dfs):
@@ -57,17 +56,87 @@ def get_comparison_chart(dfs):
             go.Scatter(x=df.index, y=df["retorno"], mode="lines", name=ticker)
         )
 
-        fig.update_layout(
-            title="Comparacion de rendimiento",
-            xaxis_title="Fecha",
-            yaxis_title="Retorno (%)",
-        )
+    fig.update_layout(
+        title="Comparacion de rendimiento",
+        xaxis_title="Fecha",
+        yaxis_title="Retorno (%)",
+    )
 
-    st.plotly_chart(fig, use_container_width=True)
+    return fig
+
+
+def get_forecast(df, days=30):
+    df_prophet = df[["Close"]].copy()
+    df_prophet = df_prophet.reset_index()  # Date pasa a ser columna
+    df_prophet.columns = ["ds", "y"]  # renombrás las columnas
+    df_prophet["ds"] = df_prophet["ds"].dt.tz_localize(None)  # sacás timezone
+
+    model = Prophet(
+        daily_seasonality=False, weekly_seasonality=False, yearly_seasonality=True
+    )
+
+    model.fit(df_prophet)
+
+    future = model.make_future_dataframe(periods=days)
+
+    # Predecir
+    forecast = model.predict(future)
+
+    return forecast
+
+
+def get_forecast_chart(df, forecast, ticker):
+    ultima_fecha = df.index[-1].tz_localize(None)
+    forecast_futuro = forecast[forecast["ds"] > ultima_fecha]
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df.index, y=df["Close"], mode="lines", name=ticker))
+    fig.add_trace(
+        go.Scatter(
+            x=forecast_futuro["ds"],
+            y=forecast_futuro["yhat_upper"],
+            mode="lines",
+            line=dict(width=0),  # línea invisible
+            name="Intervalo superior",
+        )
+    )
+
+    # Después el límite inferior — se rellena HACIA el trace anterior (yhat_upper)
+    fig.add_trace(
+        go.Scatter(
+            x=forecast_futuro["ds"],
+            y=forecast_futuro["yhat_lower"],
+            mode="lines",
+            line=dict(width=0),  # línea invisible
+            fill="tonexty",  # rellena hasta el trace de arriba
+            fillcolor="rgba(99, 110, 250, 0.3)",  # azul transparente
+            name="Intervalo de confianza",
+        )
+    )
+
+    # Finalmente la línea de predicción encima
+    fig.add_trace(
+        go.Scatter(
+            x=forecast_futuro["ds"],
+            y=forecast_futuro["yhat"],
+            mode="lines",
+            name="Predicción",
+        )
+    )
+
+    fig.update_layout(
+        title=f"Prediccion - {ticker}",
+        xaxis_title="Fecha",
+        yaxis_title="Precio (USD)",
+    )
+
+    return fig
 
 
 def main():
-    pass
+    df = get_stock_data("AAPL")
+    forecast = get_forecast(df)
+    print(forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].tail(10))
 
 
 if __name__ == "__main__":
