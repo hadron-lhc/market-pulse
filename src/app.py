@@ -19,19 +19,19 @@ def show_metrics(df):
         precio = f"${metrics['actual_price']:.2f}"
         delta = f"{metrics['delta']:+.2f}%"
 
-        st.metric(label="Precio actual", value=precio, delta=delta)
+        st.metric(label="Current Price", value=precio, delta=delta)
 
     with col2:
         volumen = f"{metrics['volumen_actual'] / 1_000_000:.1f}M"
-        st.metric(label="Volumen", value=volumen)
+        st.metric(label="Volume", value=volumen)
 
     with col3:
         max_val = f"${metrics['maximo_anual']:.2f}"
-        st.metric(label="Maximo anual", value=max_val)
+        st.metric(label="Annual High", value=max_val)
 
     with col4:
         min_val = f"${metrics['minimo_anual']:.2f}"
-        st.metric(label="Minimo anual", value=min_val)
+        st.metric(label="Annual Low", value=min_val)
 
 
 def show_metrics_short(df):
@@ -40,20 +40,20 @@ def show_metrics_short(df):
     precio = f"${metrics['actual_price']:.2f}"
     delta = f"{metrics['delta']:+.2f}%"
 
-    st.metric(label="Precio actual", value=precio, delta=delta)
+    st.metric(label="Current Price", value=precio, delta=delta)
 
 
 def main():
     st.title("Market Pulse")
     st.markdown("")
     ticker_name = st.multiselect(
-        label="Seleccioná acciones para comparar",
+        label="Select stocks to compare",
         options=["AAPL", "GOOGL", "TSLA", "NVDA", "MSFT", "META", "AMZN"],
         default=["AAPL"],
     )
 
     if not ticker_name:
-        st.info("Ingresá un ticker para comenzar")
+        st.info("Enter a ticker to start")
         st.stop()
     else:
         if len(ticker_name) == 1:
