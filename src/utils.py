@@ -1,6 +1,9 @@
 import yfinance as yf
 import plotly.graph_objects as go
 from prophet import Prophet
+import requests_cache
+
+requests_cache.install_cache("yfinance_cache", expire_after=300)  # 5 minutos
 
 
 def get_stock_data(ticker_name, period="1y"):

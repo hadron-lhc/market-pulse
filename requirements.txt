@@ -15,3 +15,4 @@ streamlit-toggle-switch
 streamlit-vertical-slider
 streamlit_faker
 yfinance
+requests-cache
