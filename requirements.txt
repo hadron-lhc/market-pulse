@@ -1,0 +1,17 @@
+cmdstanpy
+pandas
+plotly
+prophet
+streamlit
+streamlit-avatar
+streamlit-camera-input-live
+streamlit-card
+streamlit-embedcode
+streamlit-extras
+streamlit-image-coordinates
+streamlit-keyup
+streamlit-notify
+streamlit-toggle-switch
+streamlit-vertical-slider
+streamlit_faker
+yfinance
