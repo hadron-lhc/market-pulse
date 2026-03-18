@@ -5,7 +5,7 @@ interactive price charts, key financial metrics, and 30-day trend forecasting.
 
 ## Live Demo
 
-[Streamlit Cloud URL]
+<https://market--pulse.streamlit.app/>
 
 ## Features
 
