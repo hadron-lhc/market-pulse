@@ -60,10 +60,10 @@ def main():
             df = get_stock_data(ticker_name[0])
             show_metrics(df)
             chart = get_chart(df, ticker_name[0])
-            st.plotly_chart(chart, use_container_width=True)
+            st.plotly_chart(chart, width="stretch")
             forecast = get_forecast(df)
             forecast_chart = get_forecast_chart(df, forecast, ticker_name[0])
-            st.plotly_chart(forecast_chart, use_container_width=True)
+            st.plotly_chart(forecast_chart, width="stretch")
         else:
             dfs = get_multiple_stocks(ticker_name)
             cols = st.columns(len(dfs))
@@ -72,7 +72,7 @@ def main():
                     st.write(ticker)
                     show_metrics_short(df)
             comparison_chart = get_comparison_chart(dfs)
-            st.plotly_chart(comparison_chart, use_container_width=True)
+            st.plotly_chart(comparison_chart, width="stretch")
 
 
 if __name__ == "__main__":
