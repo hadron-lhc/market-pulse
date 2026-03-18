@@ -34,23 +34,32 @@ Predictive analytics powered by Prophet, showing trend direction with confidence
 
 ## Tech Stack
 
-Python · Streamlit · Plotly · yfinance · Prophet · Pandas
+- Python
+- Streamlit
+- Plotly
+- yfinance
+- Prophet
+- Pandas
 
 ## Installation
 
-git clone <https://github.com/hadron-lhc/market-pulse>
+```bash
+git clone https://github.com/hadron-lhc/market-pulse
 cd market-pulse
 pip install -r requirements.txt
 streamlit run src/app.py
+```
 
 ## Project Structure
 
+```
 market-pulse/
 ├── src/
-│ ├── app.py # Streamlit interface
-│ └── utils.py # Data fetching, metrics and chart logic
+│   ├── app.py        # Streamlit interface
+│   └── utils.py      # Data fetching, metrics and chart logic
 ├── requirements.txt
 └── README.md
+```
 
 ## Disclaimer
 
