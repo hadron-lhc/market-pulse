@@ -9,6 +9,8 @@ from utils import (
     get_forecast_chart,
 )
 
+st.set_page_config(page_title="Market Pulse", page_icon="📈", layout="wide")
+
 
 def show_metrics(df):
     metrics = get_metrics(df)
