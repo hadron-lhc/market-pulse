@@ -9,7 +9,7 @@ from utils import (
     get_forecast_chart,
 )
 
-st.set_page_config(page_title="Market Pulse", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Market Pulse", page_icon="📈")
 
 
 def show_metrics(df):
